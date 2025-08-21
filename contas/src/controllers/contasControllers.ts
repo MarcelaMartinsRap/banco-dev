@@ -72,9 +72,29 @@ const contasController = {
     }
   },
 
-  incrementarSaldo: async (req: Request, res: Response) => {},
+  incrementarSaldo: async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { valor } = req.body;
+    try {
+      const result = await contasService.incrementarSaldo(id, valor);
+      res.status(200).send(result);
+      return;
+    } catch (error) {
+      res.status(500).send("Erro ao incrementar saldo na conta de id: " + id);
+    }
+  },
 
-  decrementarSaldo: async (req: Request, res: Response) => {},
+  decrementarSaldo: async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { valor } = req.body;
+    try {
+      const result = await contasService.decrementarSaldo(id, valor);
+      res.status(200).send(result);
+      return;
+    } catch (error) {
+      res.status(500).send("Erro ao decrementar saldo na conta de id: " + id);
+    }
+  },
 
   deletarConta: async (req: Request, res: Response) => {},
 };

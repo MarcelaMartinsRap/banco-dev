@@ -40,9 +40,52 @@ const contasService = {
     }
   },
 
-  incrementarSaldo: (id: string, valor: number) => {},
+  incrementarSaldo: async (id: string, valor: number) => {
+    try {
+      const conta = await prisma.contaBancaria.findUnique({
+        where: { id: Number(id) },
+      });
+      if (!conta) {
+        throw new Error("Conta não encontrada");
+      }
 
-  decrementarSaldo: (id: string, valor: number) => {},
+      const operacao = await prisma.contaBancaria.update({
+        where: { id: Number(id) },
+        data: { saldo: { increment: valor } },
+      });
+      return {
+        data: operacao,
+        message: "Saldo incrementado com sucesso",
+        statusCode: 201,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        message: "Erro ao incrementar saldo",
+        statusCode: 500,
+      };
+    }
+  },
+
+  decrementarSaldo: async (id: string, valor: number) => {
+    const conta = await prisma.contaBancaria.findUnique({
+      where: { id: Number(id) },
+    });
+    if (!conta || conta.saldo < valor) {
+      throw new Error("Conta não encontrada ou saldo insuficiente");
+    }
+
+    const operacao = await prisma.contaBancaria.update({
+      where: { id: Number(id) },
+      data: { saldo: { decrement: valor } },
+    });
+
+    return {
+      data: operacao,
+      message: "Saldo decrementado com sucesso",
+      statusCode: 200,
+    };
+  },
 
   deletarConta: (id: string) => {},
 };
