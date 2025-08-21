@@ -32,11 +32,15 @@ class TransactionController {
     if (!id || isNaN(idNum) || idNum <= 0) {
       return res.status(400).json({ status: "erro", mensagem: "Requisição inválida" });
     }
-    const detalhes = await transactionService.verDetalhes(idNum);
-    if (detalhes.status === "num_chegou" && detalhes.erro) {
-      return res.status(404).json({ status: "erro", mensagem: "Transação não encontrada" });
+    try {
+      const detalhes = await transactionService.verDetalhes(idNum);
+      if (detalhes.status === "num_chegou" && detalhes.erro) {
+        return res.status(404).json({ status: "erro", mensagem: "Transação não encontrada" });
+      }
+      res.json({ status: "sucesso", dados: detalhes });
+    } catch (e: any) {
+      res.status(500).json({ status: "erro", mensagem: "Erro interno ao buscar detalhes da transação" });
     }
-    res.json({ status: "sucesso", dados: detalhes });
   }
 }
 

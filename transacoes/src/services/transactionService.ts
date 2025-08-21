@@ -75,8 +75,9 @@ class TransactionService {
 			await axios.post(`${CONTS}/${contaOrigem}/decrement`, { valor });
 			await axios.post(`${CONTS}/${contaDestino}/increment`, { valor });
 			status = "Chegou";
-		} catch (e) {
+		} catch (e: any) {
 			status = "num_chegou";
+			if (e && e.message) erro = e.message;
 		}
 		const transacao = await prisma.transacao.create({
 			data: {
