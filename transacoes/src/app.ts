@@ -4,7 +4,7 @@ import transactionRoutes from "./routes/transactionRoutes";
 
 const app = express();
 app.use(cors());
-const PORT = 3000;
+const PORT = 3001;
 
 app.get("/", (req, res) => {
   res.send("Olá, mundo!");

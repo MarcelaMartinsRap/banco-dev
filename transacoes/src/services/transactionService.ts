@@ -1,36 +1,15 @@
 
 import axios from "axios";
 import { TransferData } from "../types/transactionTypes";
-import prisma from "./prismaClient";
+
 
 
 
 class TransactionService {
 	async verDetalhes(id: number) {
-		const transacao = await prisma.transacao.findUnique({
-			where: { id },
-			include: {
-				contaOrigem: true,
-				contaDestino: true
-			}
-		});
-		if (!transacao) {
-			return { status: "num_chegou", erro: "Transação não encontrada" };
-		}
-		return {
-			id: transacao.id,
-			status: transacao.status,
-			valor: transacao.valorTransferencia,
-			contaOrigem: {
-				id: transacao.contaOrigem.id,
-				nomeDono: transacao.contaOrigem.nomeDono
-			},
-			contaDestino: {
-				id: transacao.contaDestino.id,
-				nomeDono: transacao.contaDestino.nomeDono
-			}
-		};
+		return { status: "num_chegou", erro: "Transação não encontrada" };
 	}
+
 	async transferir({ contaOrigem, contaDestino, valor }: TransferData, CONTS: string) {
 		let status: "Chegou" | "num_chegou" = "num_chegou";
 		let erro = null;
@@ -79,18 +58,10 @@ class TransactionService {
 			status = "num_chegou";
 			if (e && e.message) erro = e.message;
 		}
-		const transacao = await prisma.transacao.create({
-			data: {
-				contaOrigemId: contaOrigem,
-				contaDestinoId: contaDestino,
-				valorTransferencia: valor,
-				status: status
-			}
-		});
 		if (status === "Chegou") {
-			return { status: "Chegou", contaOrigem, contaDestino, valor, transacaoId: transacao.id };
+			return { status: "Chegou", contaOrigem, contaDestino, valor };
 		} else {
-			return { status: "num_chegou", erro, contaOrigem, contaDestino, valor, transacaoId: transacao.id };
+			return { status: "num_chegou", erro, contaOrigem, contaDestino, valor };
 		}
 	}
 }
