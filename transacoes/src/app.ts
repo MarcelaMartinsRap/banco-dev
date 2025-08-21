@@ -3,7 +3,7 @@ import cors from "cors";
 import transactionRoutes from "./routes/transactionRoutes";
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 app.use(cors());
 
