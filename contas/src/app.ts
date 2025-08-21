@@ -1,8 +1,10 @@
 import express from "express";
+import cors from "cors";
 import accountRoutes from "./routes/accountRoutes";
 
 
 const app = express();
+app.use(cors());
 const PORT = 3000;
 
 app.get("/", (req, res) => {
