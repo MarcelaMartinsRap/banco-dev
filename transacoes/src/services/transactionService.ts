@@ -1,10 +1,7 @@
 import { PrismaClient } from "../generated/prisma";
-
-interface TransferData {
-  contaOrigemId: number;
-  contaDestinoId: number;
-  valorTransferencia: number;
-}
+import axios from "axios";
+import { TransferData } from "../types/transactionTypes";
+import prisma from "./prismaClient";
 
 export interface Conta {
   id: number;
@@ -68,7 +65,31 @@ class TransactionService {
     }
   }
 
-  async getTransfer(id: string) {}
+  async verDetalhes(id: number) {
+    const transacao = await prisma.transacao.findUnique({
+      where: { id },
+      include: {
+        contaOrigem: true,
+        contaDestino: true,
+      },
+    });
+    if (!transacao) {
+      return { status: "num_chegou", erro: "Transação não encontrada" };
+    }
+    return {
+      id: transacao.id,
+      status: transacao.status,
+      valor: transacao.valorTransferencia,
+      contaOrigem: {
+        id: transacao.contaOrigem.id,
+        nomeDono: transacao.contaOrigem.nomeDono,
+      },
+      contaDestino: {
+        id: transacao.contaDestino.id,
+        nomeDono: transacao.contaDestino.nomeDono,
+      },
+    };
+  }
 }
 
 export default new TransactionService();
