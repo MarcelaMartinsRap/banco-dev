@@ -135,7 +135,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/jeff/desafios/banco-dev/transacoes/src/generated/prisma",
+      "value": "/workspaces/banco-dev/transacoes/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -144,12 +144,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "debian-openssl-1.1.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/jeff/desafios/banco-dev/transacoes/prisma/schema.prisma",
+    "sourceFilePath": "/workspaces/banco-dev/transacoes/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -163,6 +163,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
