@@ -44,7 +44,34 @@ const contasService = {
 
   decrementarSaldo: (id: string, valor: number) => {},
 
-  deletarConta: (id: string) => {},
+  deletarConta: async (id: string) => {
+    try {
+      const contaId = parseInt(id);
+      if (isNaN(contaId)) {
+        throw new Error("ID inválido");
+      }
+
+      const contaExistente = await prisma.contaBancaria.findUnique({
+        where: {
+          id: contaId,
+        },
+      });
+
+      if (!contaExistente) {
+        throw new Error("Conta não encontrada");
+      }
+
+      await prisma.contaBancaria.delete({
+        where: {
+          id: contaId,
+        },
+      });
+
+      return { message: "Conta deletada com sucesso" };
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default contasService;

@@ -76,7 +76,42 @@ const contasController = {
 
   decrementarSaldo: async (req: Request, res: Response) => {},
 
-  deletarConta: async (req: Request, res: Response) => {},
+  deletarConta: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(400).json({
+          error: "ID da conta é obrigatório",
+        });
+      }
+
+      const resultado = await contasService.deletarConta(id);
+
+      res.status(200).json({
+        message: "Conta deletada com sucesso",
+        resultado: resultado,
+      });
+    } catch (error: any) {
+      console.error("Erro ao deletar conta:", error);
+
+      if (error.message === "Conta não encontrada") {
+        return res.status(404).json({
+          error: "Conta não encontrada",
+        });
+      }
+
+      if (error.message === "ID inválido") {
+        return res.status(400).json({
+          error: "ID inválido",
+        });
+      }
+
+      res.status(500).json({
+        error: "Erro interno do servidor ao deletar conta",
+      });
+    }
+  },
 };
 
 export default contasController;
